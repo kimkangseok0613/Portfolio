@@ -480,6 +480,7 @@
 "Assets/Scrips/GunPickup.cs"
 "Assets/Scrips/GunShoot.cs"
 "Assets/Scrips/JumpPad.cs"
+"Assets/Scrips/Options/OptionManager.cs"
 "Assets/Scrips/PlayerMovement.cs"
 "Assets/Scrips/SceneLoader.cs"
 "Assets/Scrips/SkillCooldown.cs"

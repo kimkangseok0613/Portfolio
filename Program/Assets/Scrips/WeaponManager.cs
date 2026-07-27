@@ -16,10 +16,10 @@ public class WeaponManager : MonoBehaviour
         }
 
         // 첫 번째 총 장착(원하면 삭제 가능)
-        if (weapons.Length > 0)
-        {
-            EquipWeapon(weapons[0]);
-        }
+        //if (weapons.Length > 0)
+        //{
+        //    EquipWeapon(weapons[0]);
+        //}
     }
 
     public void EquipWeapon(GameObject newWeapon)
