@@ -139,6 +139,7 @@
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
 -define:TEXTCORE_TEXT_ENGINE_1_5_OR_NEWER
 -define:TEXTCORE_FONT_ENGINE_1_6_OR_NEWER
+-define:UNITY_POST_PROCESSING_STACK_V2
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
 -r:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Managed/UnityEngine/UnityEditor.AccessibilityModule.dll"
@@ -422,6 +423,8 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Common.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Multiplayer.Center.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.PlasticSCM.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Postprocessing.Editor.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Postprocessing.Runtime.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Recorder.Base.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Recorder.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Recorder.ref.dll"
@@ -467,10 +470,12 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.3.19f1/Editor/Data/Tools/BuildPipeline/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 "Assets/Scifi-Gun/ReadMe.cs"
+"Assets/Scrips/BillBoard.cs"
 "Assets/Scrips/Bullet.cs"
 "Assets/Scrips/CameraLook.cs"
 "Assets/Scrips/DoubleJumpUI.cs"
 "Assets/Scrips/EnemyHealth.cs"
+"Assets/Scrips/EnemySpawner.cs"
 "Assets/Scrips/Exit.cs"
 "Assets/Scrips/GunPickup.cs"
 "Assets/Scrips/GunShoot.cs"
@@ -479,6 +484,7 @@
 "Assets/Scrips/SceneLoader.cs"
 "Assets/Scrips/SkillCooldown.cs"
 "Assets/Scrips/ToggleButtonController.cs"
+"Assets/Scrips/WeaponManager.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 /deterministic
