@@ -2,55 +2,69 @@ using UnityEngine;
 
 public class GunPickup : MonoBehaviour
 {
-    public GameObject playerGun;
+    [Header("획득할 총 프리팹")]
+    public GameObject weaponPrefab;
 
+
+    [Header("줍기 UI")]
     public GameObject pickupUI;
+
 
     private bool canPickUp = false;
 
-    // 플레이어가 현재 들고 있는 총
-    private static GameObject currentGun;
+
+    private WeaponManager weaponManager;
+
+
 
     void Start()
     {
-        // 바닥에 있는 총이면 플레이어 총 숨김
-        if (playerGun != null)
-            playerGun.SetActive(false);
-
-        // 안내 UI 숨김
         if (pickupUI != null)
+        {
             pickupUI.SetActive(false);
+        }
     }
+
+
+
 
     void Update()
     {
-        if (canPickUp && Input.GetKeyDown(KeyCode.E))
+        if (canPickUp &&
+           Input.GetKeyDown(KeyCode.E))
         {
             PickUp();
         }
     }
 
+
+
+
+
     void PickUp()
     {
-        // 기존에 들고 있던 총 숨기기
-        if (currentGun != null)
+        if (weaponManager == null)
+            return;
+
+
+        // WeaponManager에게 총 프리팹 전달
+        weaponManager.PickupWeapon(weaponPrefab);
+
+
+
+        if (pickupUI != null)
         {
-            currentGun.SetActive(false);
+            pickupUI.SetActive(false);
         }
 
-        // 새로운 총 장착
-        playerGun.SetActive(true);
-
-        // 현재 총 저장
-        currentGun = playerGun;
-
-        // UI 숨기기
-        if (pickupUI != null)
-            pickupUI.SetActive(false);
 
         // 바닥 총 제거
-        //gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
+
+
+
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -58,10 +72,21 @@ public class GunPickup : MonoBehaviour
         {
             canPickUp = true;
 
+
+            weaponManager =
+                other.GetComponent<WeaponManager>();
+
+
             if (pickupUI != null)
+            {
                 pickupUI.SetActive(true);
+            }
         }
     }
+
+
+
+
 
     void OnTriggerExit(Collider other)
     {
@@ -69,8 +94,11 @@ public class GunPickup : MonoBehaviour
         {
             canPickUp = false;
 
+
             if (pickupUI != null)
+            {
                 pickupUI.SetActive(false);
+            }
         }
     }
 }

@@ -485,6 +485,11 @@
 "Assets/Scrips/SceneLoader.cs"
 "Assets/Scrips/SkillCooldown.cs"
 "Assets/Scrips/ToggleButtonController.cs"
+"Assets/Scrips/Weapon/GunBase.cs"
+"Assets/Scrips/Weapon/HandGun.cs"
+"Assets/Scrips/Weapon/Rifle.cs"
+"Assets/Scrips/Weapon/SniperGun.cs"
+"Assets/Scrips/Weapon/WeaponSetting.cs"
 "Assets/Scrips/WeaponManager.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0

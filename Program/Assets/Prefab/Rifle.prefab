@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.23
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.1800003
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -67,6 +67,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
       insertIndex: -1
       addedObject: {fileID: -9163018090259323943}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -320305106695473991}
   m_SourcePrefab: {fileID: 100100000, guid: a65c380038413ef459e18f1ca654ff9b, type: 3}
 --- !u!1 &2236253442610328237 stripped
 GameObject:
@@ -95,3 +98,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &-320305106695473991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2236253442610328237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65ec0576da839a54e85a5193bee3501b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunShoot
+  bulletPrefab: {fileID: 4123542342146786202, guid: 01329b94a8665d04e8de765c7694293d, type: 3}
+  muzzle: {fileID: 2941653872222603127, guid: 1a1de1058fa632f4d93dd55b15e91349, type: 3}
+  fireRate: 0.2
+  reloadTime: 1.5
+  maxAmmo: 10
+  ammoText: {fileID: 1763660181373787116, guid: 92247f18b7b5b7e458dd07d372ccb48b, type: 3}

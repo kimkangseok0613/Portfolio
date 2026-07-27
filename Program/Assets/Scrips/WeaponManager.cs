@@ -2,36 +2,189 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    [Header("플레이어가 가지고 있는 총들")]
-    public GameObject[] weapons;
 
-    private GameObject currentWeapon;
+    [Header("총 생성 위치")]
+    public Transform weaponParent;
 
-    void Start()
+
+
+    [Header("최대 보유 총")]
+    public int maxWeapon = 2;
+
+
+
+    private GameObject[] weapons;
+
+
+    private int currentWeaponIndex = -1;
+
+
+
+    void Awake()
     {
-        // 시작 시 모든 총 비활성화
-        foreach (GameObject weapon in weapons)
-        {
-            weapon.SetActive(false);
-        }
-
-        // 첫 번째 총 장착(원하면 삭제 가능)
-        //if (weapons.Length > 0)
-        //{
-        //    EquipWeapon(weapons[0]);
-        //}
+        weapons = new GameObject[maxWeapon];
     }
 
-    public void EquipWeapon(GameObject newWeapon)
+
+
+
+    void Update()
     {
-        // 모든 총 비활성화
-        foreach (GameObject weapon in weapons)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            weapon.SetActive(false);
+            EquipWeapon(0);
         }
 
-        // 선택한 총만 활성화
-        newWeapon.SetActive(true);
-        currentWeapon = newWeapon;
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            EquipWeapon(1);
+        }
     }
+
+
+
+
+
+
+
+    public void PickupWeapon(GameObject weaponPrefab)
+    {
+
+        for (int i = 0; i < weapons.Length; i++)
+        {
+
+            if (weapons[i] == null)
+            {
+                CreateWeapon(
+                    weaponPrefab,
+                    i
+                );
+
+                return;
+            }
+
+        }
+
+
+
+        SwapWeapon(weaponPrefab);
+
+    }
+
+
+
+
+
+
+
+    void CreateWeapon(GameObject weaponPrefab, int slot)
+    {
+
+        GameObject newWeapon =
+            Instantiate(
+                weaponPrefab,
+                weaponParent
+            );
+
+
+
+        // 프리팹 기준 적용
+        WeaponSetting setting =
+            newWeapon.GetComponent<WeaponSetting>();
+
+
+        if (setting != null)
+        {
+            newWeapon.transform.localPosition =
+                setting.position;
+
+
+            newWeapon.transform.localEulerAngles =
+                setting.rotation;
+
+
+            newWeapon.transform.localScale =
+                setting.scale;
+        }
+
+
+
+        weapons[slot] = newWeapon;
+
+
+
+        EquipWeapon(slot);
+
+    }
+
+
+
+
+
+
+
+    public void EquipWeapon(int index)
+    {
+
+        if (index < 0 ||
+           index >= weapons.Length)
+            return;
+
+
+        if (weapons[index] == null)
+            return;
+
+
+
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+            {
+                weapons[i].SetActive(false);
+            }
+        }
+
+
+
+        weapons[index].SetActive(true);
+
+
+        currentWeaponIndex = index;
+
+
+        Debug.Log(
+            "장착 : " +
+            weapons[index].name
+        );
+
+    }
+
+
+
+
+
+
+
+    void SwapWeapon(GameObject weaponPrefab)
+    {
+
+        if (currentWeaponIndex == -1)
+            return;
+
+
+
+        Destroy(
+            weapons[currentWeaponIndex]
+        );
+
+
+
+        CreateWeapon(
+            weaponPrefab,
+            currentWeaponIndex
+        );
+
+    }
+
 }
