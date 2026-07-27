@@ -1,104 +1,73 @@
 using UnityEngine;
+using TMPro;
 
 public class GunPickup : MonoBehaviour
 {
-    [Header("íšë“í•  ì´ í”„ë¦¬íŒ¹")]
-    public GameObject weaponPrefab;
+    [Header("ÀÌ ¹Ù´Ú ¾ÆÀÌÅÛÀÌ ºÎ¿©ÇÒ ¹«±â ¹øÈ£ (0, 1, 2...)")]
+    public int weaponIndex = 0;
 
-
-    [Header("ì¤ê¸° UI")]
-    public GameObject pickupUI;
-
-
-    private bool canPickUp = false;
-
-
-    private WeaponManager weaponManager;
-
-
+    public TextMeshProUGUI text;
+    private bool playerNear = false;
 
     void Start()
     {
-        if (pickupUI != null)
-        {
-            pickupUI.SetActive(false);
-        }
+        HideText();
     }
-
-
-
 
     void Update()
     {
-        if (canPickUp &&
-           Input.GetKeyDown(KeyCode.E))
+        if (playerNear && Input.GetKeyDown(KeyCode.E))
         {
-            PickUp();
+            Pickup(); 
         }
     }
 
-
-
-
-
-    void PickUp()
+    void Pickup()
     {
-        if (weaponManager == null)
-            return;
-
-
-        // WeaponManagerì—ê²Œ ì´ í”„ë¦¬íŒ¹ ì „ë‹¬
-        weaponManager.PickupWeapon(weaponPrefab);
-
-
-
-        if (pickupUI != null)
+        // 1. ¸Å´ÏÀú¿¡°Ô ¼ıÀÚ ¹øÈ£¸¸ Àü´ŞÇØ¼­ ÇÃ·¹ÀÌ¾î ÃÑÀ» ÄÔ
+        if (WeaponManager.Instance != null)
         {
-            pickupUI.SetActive(false);
+            WeaponManager.Instance.EquipWeapon(weaponIndex);
         }
 
+        HideText();
 
-        // ë°”ë‹¥ ì´ ì œê±°
-        //Destroy(gameObject);
+        // 2. [ÇÙ½É] Destroy ´ë½Å ÀÚ±â ÀÚ½ÅÀ» ºñÈ°¼ºÈ­(¼û±â±â)¸¸ ¼öÇà
+        //gameObject.SetActive(false);
     }
 
+    void ShowText()
+    {
+        if (text != null)
+        {
+            text.text = "Press [E] to get";
+            text.gameObject.SetActive(true);
+        }
+    }
 
-
-
+    void HideText()
+    {
+        if (text != null)
+        {
+            text.gameObject.SetActive(false);
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            canPickUp = true;
-
-
-            weaponManager =
-                other.GetComponent<WeaponManager>();
-
-
-            if (pickupUI != null)
-            {
-                pickupUI.SetActive(true);
-            }
+            playerNear = true;
+            ShowText();
         }
     }
-
-
-
-
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            canPickUp = false;
-
-
-            if (pickupUI != null)
-            {
-                pickupUI.SetActive(false);
-            }
+            playerNear = false;
+            HideText();
         }
     }
 }

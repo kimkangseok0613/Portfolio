@@ -1,141 +1,49 @@
 using UnityEngine;
+using TMPro;
 
 public class WeaponManager : MonoBehaviour
 {
+    public static WeaponManager Instance;
 
-    [Header("총 생성 위치")]
-    public Transform weaponParent;
+    [Header("카메라 밑 무기들을 순서대로 등록 (0번, 1번, 2번...)")]
+    public GameObject[] weapons;
 
+    [Header("UI (탄약 표시)")]
+    public TMP_Text globalAmmoText;
 
-
-    [Header("최대 보유 총")]
-    public int maxWeapon = 2;
-
-
-
-    private GameObject[] weapons;
-
-
-    private int currentWeaponIndex = -1;
-
-
+    // 현재 들고 있는 무기의 인덱스 (-1은 맨손 상태)
+    public int currentWeaponIndex = -1;
 
     void Awake()
     {
-        weapons = new GameObject[maxWeapon];
-    }
-
-
-
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Instance == null)
         {
-            EquipWeapon(0);
+            Instance = this;
         }
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else
         {
-            EquipWeapon(1);
-        }
-    }
-
-
-
-
-
-
-
-    public void PickupWeapon(GameObject weaponPrefab)
-    {
-
-        for (int i = 0; i < weapons.Length; i++)
-        {
-
-            if (weapons[i] == null)
-            {
-                CreateWeapon(
-                    weaponPrefab,
-                    i
-                );
-
-                return;
-            }
-
-        }
-
-
-
-        SwapWeapon(weaponPrefab);
-
-    }
-
-
-
-
-
-
-
-    void CreateWeapon(GameObject weaponPrefab, int slot)
-    {
-
-        GameObject newWeapon =
-            Instantiate(
-                weaponPrefab,
-                weaponParent
-            );
-
-
-
-        // 프리팹 기준 적용
-        WeaponSetting setting =
-            newWeapon.GetComponent<WeaponSetting>();
-
-
-        if (setting != null)
-        {
-            newWeapon.transform.localPosition =
-                setting.position;
-
-
-            newWeapon.transform.localEulerAngles =
-                setting.rotation;
-
-
-            newWeapon.transform.localScale =
-                setting.scale;
-        }
-
-
-
-        weapons[slot] = newWeapon;
-
-
-
-        EquipWeapon(slot);
-
-    }
-
-
-
-
-
-
-
-    public void EquipWeapon(int index)
-    {
-
-        if (index < 0 ||
-           index >= weapons.Length)
+            Destroy(this);
             return;
+        }
+    }
 
+    void Start()
+    {
+        Unarmed(); // 시작 시 맨손 상태
+    }
 
-        if (weapons[index] == null)
-            return;
+    // 모든 무기를 끄고 맨손 상태로 만드는 함수
+    public void Unarmed()
+    {
+        currentWeaponIndex = -1;
+        HideAllWeapons();
+        ShowEmptyUI();
+    }
 
-
+    // 카메라 밑의 모든 총을 끄는 함수
+    public void HideAllWeapons()
+    {
+        if (weapons == null) return;
 
         for (int i = 0; i < weapons.Length; i++)
         {
@@ -144,47 +52,34 @@ public class WeaponManager : MonoBehaviour
                 weapons[i].SetActive(false);
             }
         }
-
-
-
-        weapons[index].SetActive(true);
-
-
-        currentWeaponIndex = index;
-
-
-        Debug.Log(
-            "장착 : " +
-            weapons[index].name
-        );
-
     }
 
-
-
-
-
-
-
-    void SwapWeapon(GameObject weaponPrefab)
+    // 인덱스 번호로 해당 무기만 켜는 함수
+    public void EquipWeapon(int index)
     {
-
-        if (currentWeaponIndex == -1)
+        if (weapons == null || index < 0 || index >= weapons.Length)
+        {
+            Debug.LogError($"[WeaponManager] {index}번 무기가 weapons 배열 범위를 벗어났습니다!");
             return;
+        }
 
+        // 1. 기존 모든 손 무기 비활성화
+        HideAllWeapons();
 
-
-        Destroy(
-            weapons[currentWeaponIndex]
-        );
-
-
-
-        CreateWeapon(
-            weaponPrefab,
-            currentWeaponIndex
-        );
-
+        // 2. 지정된 번호의 무기만 활성화
+        if (weapons[index] != null)
+        {
+            weapons[index].SetActive(true);
+            currentWeaponIndex = index;
+            Debug.Log($"[WeaponManager] {index}번 무기('{weapons[index].name}') 장착 완료!");
+        }
     }
 
+    public void ShowEmptyUI()
+    {
+        if (globalAmmoText != null)
+        {
+            globalAmmoText.text = "EMPTY";
+        }
+    }
 }
