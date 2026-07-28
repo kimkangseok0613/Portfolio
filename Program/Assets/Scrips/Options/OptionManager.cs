@@ -1,66 +1,171 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class OptionManager : MonoBehaviour
 {
     public GameObject optionPanel;
 
+    [Header("Sensitivity")]
     public Slider sensitivitySlider;
+    public TMP_InputField sensitivityInput;
 
-    public InputField sensitivityInput;
+
+    public float defaultSensitivity = 200f;
+
+
 
     void Start()
     {
-        // 게임 시작할 때 항상 감도 200으로 초기화
-        PlayerPrefs.SetFloat("MouseSensitivity", 200f);
+        // 저장된 감도 불러오기
+        float sensitivity =
+            PlayerPrefs.GetFloat(
+                "MouseSensitivity",
+                defaultSensitivity
+            );
 
-        sensitivitySlider.value = 200f;
-        sensitivityInput.text = "200";
 
-        sensitivitySlider.onValueChanged.AddListener(ChangeSlider);
-        sensitivityInput.onEndEdit.AddListener(ChangeInput);
+        sensitivitySlider.minValue = 50f;
+        sensitivitySlider.maxValue = 500f;
+
+
+        sensitivitySlider.value = sensitivity;
+
+
+        sensitivityInput.text =
+            sensitivity.ToString("0");
+
+
+
+        sensitivitySlider.onValueChanged.AddListener(
+            ChangeSlider
+        );
+
+
+        sensitivityInput.onEndEdit.AddListener(
+            ChangeInput
+        );
+
 
         optionPanel.SetActive(false);
+
+
+
+        // 시작 시 게임 정상 상태
+        Time.timeScale = 1f;
     }
+
+
+
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            bool open = !optionPanel.activeSelf;
-
-            optionPanel.SetActive(open);
-
-            Cursor.visible = open;
-
-            Cursor.lockState = open ?
-                CursorLockMode.None :
-                CursorLockMode.Locked;
-
-            CameraLook.canLook = !open;
+            ToggleOption();
         }
     }
 
+
+
+
+
+    void ToggleOption()
+    {
+        bool open =
+            !optionPanel.activeSelf;
+
+
+        optionPanel.SetActive(open);
+
+
+
+        if (open)
+        {
+            // 옵션창
+            Cursor.visible = true;
+
+            Cursor.lockState =
+                CursorLockMode.None;
+
+
+            CameraLook.canLook = false;
+        }
+        else
+        {
+            // 게임 복귀
+            Cursor.visible = false;
+
+            Cursor.lockState =
+                CursorLockMode.Locked;
+
+
+            CameraLook.canLook = true;
+        }
+    }
+
+
+
+
+
+
     void ChangeSlider(float value)
     {
-        PlayerPrefs.SetFloat("MouseSensitivity", value);
+        PlayerPrefs.SetFloat(
+            "MouseSensitivity",
+            value
+        );
 
-        sensitivityInput.text = value.ToString("0");
+
+        PlayerPrefs.Save();
+
+
+
+        sensitivityInput.text =
+            value.ToString("0");
     }
+
+
+
+
+
 
     void ChangeInput(string value)
     {
         float number;
 
+
         if (float.TryParse(value, out number))
         {
-            number = Mathf.Clamp(number, 50f, 500f);
+            number =
+                Mathf.Clamp(
+                    number,
+                    50f,
+                    500f
+                );
 
-            sensitivitySlider.value = number;
 
-            PlayerPrefs.SetFloat("MouseSensitivity", number);
+            sensitivitySlider.value =
+                number;
 
-            sensitivityInput.text = number.ToString("0");
+
+            PlayerPrefs.SetFloat(
+                "MouseSensitivity",
+                number
+            );
+
+
+            PlayerPrefs.Save();
+
+
+
+            sensitivityInput.text =
+                number.ToString("0");
+        }
+        else
+        {
+            sensitivityInput.text =
+                sensitivitySlider.value.ToString("0");
         }
     }
 }

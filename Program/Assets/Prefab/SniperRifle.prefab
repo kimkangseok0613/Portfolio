@@ -137,11 +137,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunShoot
   bulletPrefab: {fileID: 4123542342146786202, guid: c7feb1bc901d9aa4b93a33ec13d7e63d, type: 3}
-  muzzle: {fileID: 7897108523010691138}
+  muzzle: {fileID: 432129722048298319, guid: 5a2fcb69e4544f34a986cd2ea0eb0ce5, type: 3}
   fireRate: 1.5
   reloadTime: 2
   maxAmmo: 6
-  ammoText: {fileID: 1763660181373787116, guid: 92247f18b7b5b7e458dd07d372ccb48b, type: 3}
 --- !u!1 &8468346681780497247
 GameObject:
   m_ObjectHideFlags: 0

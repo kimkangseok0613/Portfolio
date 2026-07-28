@@ -10,23 +10,35 @@ public class GunShoot : MonoBehaviour
     public float fireRate = 0.2f;
     public float reloadTime = 1.5f;
 
+
     [Header("탄약")]
     public int maxAmmo = 10;
+
 
     private int currentAmmo;
     private float nextFire;
     private bool isReloading;
+
+
 
     void Awake()
     {
         currentAmmo = maxAmmo;
     }
 
+
+
     void OnEnable()
     {
+        // 무기를 다시 들면 탄약 초기화
+        currentAmmo = maxAmmo;
+
         isReloading = false;
+
         UpdateAmmoUI();
     }
+
+
 
     void OnDisable()
     {
@@ -34,25 +46,29 @@ public class GunShoot : MonoBehaviour
         isReloading = false;
     }
 
+
+
     void Update()
     {
-        // 1. 매니저가 없거나 맨손 상태(currentWeaponIndex == -1)이면 동작 안 함
-        if (WeaponManager.Instance == null || WeaponManager.Instance.currentWeaponIndex == -1)
-        {
+        // 무기 매니저 체크
+        if (WeaponManager.Instance == null)
             return;
-        }
 
-        // 2. 이 총 오브젝트 자체가 켜져있지 않으면 발사 금지
-        if (!gameObject.activeSelf || !gameObject.activeInHierarchy)
-        {
+
+        // 현재 들고 있는 총인지 확인
+        if (WeaponManager.Instance.currentWeaponIndex == -1)
             return;
-        }
 
-        // 3. 재장전 중이면 발사 불가
+
+        // 비활성화 총 발사 방지
+        if (!gameObject.activeInHierarchy)
+            return;
+
+
         if (isReloading)
-        {
             return;
-        }
+
+
 
         // 자동 재장전
         if (currentAmmo <= 0)
@@ -61,65 +77,145 @@ public class GunShoot : MonoBehaviour
             return;
         }
 
-        // R키 수동 재장전
-        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)
+
+
+        // 수동 재장전
+        if (Input.GetKeyDown(KeyCode.R)
+           && currentAmmo < maxAmmo)
         {
             StartCoroutine(Reload());
             return;
         }
 
-        // 발사 (마우스 좌클릭)
-        if (Input.GetMouseButton(0) && Time.time >= nextFire)
+
+
+        // 발사
+        if (Input.GetMouseButton(0)
+           && Time.time >= nextFire)
         {
-            nextFire = Time.time + fireRate;
+            nextFire =
+                Time.time + fireRate;
+
             Shoot();
         }
     }
 
+
+
+
+
     void Shoot()
     {
-        if (bulletPrefab != null && muzzle != null)
+        if (bulletPrefab == null)
         {
-            GameObject bullet = Instantiate(
+            Debug.LogWarning(
+                "Bullet Prefab이 없습니다."
+            );
+            return;
+        }
+
+
+        if (muzzle == null)
+        {
+            Debug.LogWarning(
+                "Muzzle이 연결되지 않았습니다."
+            );
+            return;
+        }
+
+
+
+        // 총알 생성
+        GameObject bullet =
+            Instantiate(
                 bulletPrefab,
                 muzzle.position,
-                Camera.main != null ? Camera.main.transform.rotation : transform.rotation
+                muzzle.rotation
             );
 
-            bullet.SetActive(true);
-        }
-        else
+
+
+        Debug.Log(
+            "총알 생성 위치 : "
+            + bullet.transform.position
+        );
+
+
+
+        // 총알이 총과 충돌하지 않도록 설정
+        Collider bulletCol =
+            bullet.GetComponent<Collider>();
+
+
+        Collider gunCol =
+            GetComponent<Collider>();
+
+
+        if (bulletCol != null &&
+           gunCol != null)
         {
-            Debug.LogWarning($"[{gameObject.name}] Bullet Prefab 또는 Muzzle이 설정되지 않았습니다!");
+            Physics.IgnoreCollision(
+                bulletCol,
+                gunCol
+            );
         }
 
+
+
         currentAmmo--;
+
         UpdateAmmoUI();
     }
+
+
+
+
+
 
     IEnumerator Reload()
     {
         isReloading = true;
 
-        if (WeaponManager.Instance != null && gameObject.activeInHierarchy)
+
+        if (WeaponManager.Instance != null &&
+           WeaponManager.Instance.globalAmmoText != null)
         {
-            WeaponManager.Instance.globalAmmoText.text = "Reloading...";
+            WeaponManager.Instance.globalAmmoText.text =
+                "Reloading...";
         }
 
-        yield return new WaitForSeconds(reloadTime);
+
+
+        yield return new WaitForSeconds(
+            reloadTime
+        );
+
+
 
         currentAmmo = maxAmmo;
+
         isReloading = false;
+
 
         UpdateAmmoUI();
     }
 
-    private void UpdateAmmoUI()
+
+
+
+
+
+
+    void UpdateAmmoUI()
     {
-        // 내 총이 실제로 활성화되어 있을 때만 UI 업데이트
-        if (gameObject.activeInHierarchy && WeaponManager.Instance != null && WeaponManager.Instance.globalAmmoText != null)
+        if (gameObject.activeInHierarchy &&
+           WeaponManager.Instance != null &&
+           WeaponManager.Instance.globalAmmoText != null)
         {
-            WeaponManager.Instance.globalAmmoText.text = currentAmmo + " / " + maxAmmo;
+            WeaponManager.Instance.globalAmmoText.text =
+                currentAmmo +
+                " / " +
+                maxAmmo;
         }
     }
 }
