@@ -5,6 +5,7 @@ using System.Collections;
 
 public class GunShoot : MonoBehaviour
 {
+    [SerializeField] public static int zoomWeaponIndex;
     [Header("총 설정")]
     public GameObject bulletPrefab;
     public Transform muzzle;
@@ -27,7 +28,7 @@ public class GunShoot : MonoBehaviour
     // 탄약 저장 여부
     private bool initializedAmmo = false;
 
-
+    public static bool canShoot = true;
 
     void Awake()
     {
@@ -137,7 +138,8 @@ public class GunShoot : MonoBehaviour
         }
 
 
-
+        if (!canShoot)
+            return;
 
 
         // 발사

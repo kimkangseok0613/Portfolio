@@ -90,6 +90,7 @@ public class OptionManager : MonoBehaviour
 
 
             CameraLook.canLook = false;
+            GunShoot.canShoot = false;
         }
         else
         {
@@ -101,6 +102,7 @@ public class OptionManager : MonoBehaviour
 
 
             CameraLook.canLook = true;
+            GunShoot.canShoot= true;
         }
     }
 

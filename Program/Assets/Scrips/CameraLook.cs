@@ -30,9 +30,11 @@ public class CameraLook : MonoBehaviour
     [Header("Zoom Settings")]
     public Camera playerCamera;
 
-    public float normalFOV = 60f;
+    public float normalFOV = 103f;
 
-    public float zoomFOV = 30f;
+    public float zoomFOV = 85f;
+
+    public float sniperZoomFOV = 60f;
 
     public float zoomSpeed = 10f;
 
