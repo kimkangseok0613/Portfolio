@@ -1,3 +1,5 @@
+// CameraLook.cs
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -25,6 +27,21 @@ public class CameraLook : MonoBehaviour
 
 
 
+    [Header("Zoom Settings")]
+    public Camera playerCamera;
+
+    public float normalFOV = 60f;
+
+    public float zoomFOV = 30f;
+
+    public float zoomSpeed = 10f;
+
+
+    private float currentVelocity;
+
+
+
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -36,6 +53,19 @@ public class CameraLook : MonoBehaviour
 
 
         RefreshSensitivity();
+
+
+
+        if (playerCamera == null)
+        {
+            playerCamera = GetComponent<Camera>();
+        }
+
+
+        if (playerCamera != null)
+        {
+            normalFOV = playerCamera.fieldOfView;
+        }
 
 
 
@@ -72,6 +102,8 @@ public class CameraLook : MonoBehaviour
 
 
 
+
+
     public void RefreshSensitivity()
     {
         mouseSensitivity =
@@ -85,7 +117,8 @@ public class CameraLook : MonoBehaviour
 
 
 
-    // Slider 조절
+
+
     public void ChangeSensitivitySlider(float value)
     {
         mouseSensitivity = value;
@@ -107,7 +140,7 @@ public class CameraLook : MonoBehaviour
 
 
 
-    // 숫자 직접 입력
+
     public void ChangeSensitivityInput(string value)
     {
         float result;
@@ -142,11 +175,11 @@ public class CameraLook : MonoBehaviour
         }
         else
         {
-            // 잘못 입력하면 원래 값 복구
             sensitivityInput.text =
                 Mathf.RoundToInt(mouseSensitivity).ToString();
         }
     }
+
 
 
 
@@ -169,11 +202,17 @@ public class CameraLook : MonoBehaviour
 
 
 
+
+
     void LateUpdate()
     {
+
         if (!canLook)
             return;
 
+
+
+        // 마우스 회전
 
         float mouseX =
             Input.GetAxisRaw("Mouse X")
@@ -187,7 +226,9 @@ public class CameraLook : MonoBehaviour
             * 0.01f;
 
 
+
         xRotation -= mouseY;
+
 
         xRotation =
             Mathf.Clamp(
@@ -195,6 +236,7 @@ public class CameraLook : MonoBehaviour
                 -90f,
                 90f
             );
+
 
 
         transform.localRotation =
@@ -205,11 +247,56 @@ public class CameraLook : MonoBehaviour
             );
 
 
+
         if (playerBody != null)
         {
             playerBody.Rotate(
                 Vector3.up * mouseX
             );
         }
+
+
+
+        // 줌 처리
+
+        Zoom();
+
     }
+
+
+
+
+
+
+
+
+    void Zoom()
+    {
+        if (playerCamera == null)
+            return;
+
+
+        float targetFOV = normalFOV;
+
+
+        // 총을 들고 있을 때만 줌 가능
+        if (WeaponManager.Instance != null &&
+            WeaponManager.Instance.currentWeaponIndex != -1)
+        {
+            if (Input.GetMouseButton(1))
+            {
+                targetFOV = zoomFOV;
+            }
+        }
+
+
+        playerCamera.fieldOfView =
+            Mathf.SmoothDamp(
+                playerCamera.fieldOfView,
+                targetFOV,
+                ref currentVelocity,
+                1f / zoomSpeed
+            );
+    }
+
 }

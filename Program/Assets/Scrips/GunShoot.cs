@@ -1,3 +1,5 @@
+// GunShoot.cs
+
 using UnityEngine;
 using System.Collections;
 
@@ -16,8 +18,14 @@ public class GunShoot : MonoBehaviour
 
 
     private int currentAmmo;
+
     private float nextFire;
+
     private bool isReloading;
+
+
+    // 탄약 저장 여부
+    private bool initializedAmmo = false;
 
 
 
@@ -28,41 +36,76 @@ public class GunShoot : MonoBehaviour
 
 
 
+
     void OnEnable()
     {
-        // 무기를 다시 들면 탄약 초기화
-        currentAmmo = maxAmmo;
+        // 처음 얻은 총이면 탄약 풀 충전
+        if (!initializedAmmo)
+        {
+            currentAmmo = maxAmmo;
+
+            initializedAmmo = true;
+        }
+
 
         isReloading = false;
+
 
         UpdateAmmoUI();
     }
 
 
 
+
+
     void OnDisable()
     {
         StopAllCoroutines();
+
         isReloading = false;
+
+
+        // 총을 바꿀 때 현재 탄약 저장
+        SaveAmmo();
     }
+
+
+
 
 
 
     void Update()
     {
-        // 무기 매니저 체크
+        if (WeaponManager.Instance != null &&
+    WeaponManager.Instance.isSwitching)
+        {
+            return;
+        }
+
         if (WeaponManager.Instance == null)
             return;
 
 
-        // 현재 들고 있는 총인지 확인
+
+        // 현재 장착 총인지 확인
         if (WeaponManager.Instance.currentWeaponIndex == -1)
             return;
 
 
-        // 비활성화 총 발사 방지
+
+        if (WeaponManager.Instance.weapons[
+            WeaponManager.Instance.currentWeaponIndex]
+            != gameObject)
+        {
+            return;
+        }
+
+
+
+
         if (!gameObject.activeInHierarchy)
             return;
+
 
 
         if (isReloading)
@@ -70,35 +113,47 @@ public class GunShoot : MonoBehaviour
 
 
 
+
+
         // 자동 재장전
         if (currentAmmo <= 0)
         {
             StartCoroutine(Reload());
+
             return;
         }
+
+
 
 
 
         // 수동 재장전
         if (Input.GetKeyDown(KeyCode.R)
-           && currentAmmo < maxAmmo)
+            && currentAmmo < maxAmmo)
         {
             StartCoroutine(Reload());
+
             return;
         }
 
 
 
+
+
         // 발사
         if (Input.GetMouseButton(0)
-           && Time.time >= nextFire)
+            && Time.time >= nextFire)
         {
             nextFire =
                 Time.time + fireRate;
 
+
             Shoot();
         }
+
     }
+
+
 
 
 
@@ -106,26 +161,31 @@ public class GunShoot : MonoBehaviour
 
     void Shoot()
     {
+
         if (bulletPrefab == null)
         {
             Debug.LogWarning(
                 "Bullet Prefab이 없습니다."
             );
+
             return;
         }
+
+
 
 
         if (muzzle == null)
         {
             Debug.LogWarning(
-                "Muzzle이 연결되지 않았습니다."
+                "Muzzle이 없습니다."
             );
+
             return;
         }
 
 
 
-        // 총알 생성
+
         GameObject bullet =
             Instantiate(
                 bulletPrefab,
@@ -135,14 +195,8 @@ public class GunShoot : MonoBehaviour
 
 
 
-        Debug.Log(
-            "총알 생성 위치 : "
-            + bullet.transform.position
-        );
 
 
-
-        // 총알이 총과 충돌하지 않도록 설정
         Collider bulletCol =
             bullet.GetComponent<Collider>();
 
@@ -151,8 +205,10 @@ public class GunShoot : MonoBehaviour
             GetComponent<Collider>();
 
 
+
+
         if (bulletCol != null &&
-           gunCol != null)
+            gunCol != null)
         {
             Physics.IgnoreCollision(
                 bulletCol,
@@ -162,10 +218,17 @@ public class GunShoot : MonoBehaviour
 
 
 
+
+
         currentAmmo--;
 
+
         UpdateAmmoUI();
+
     }
+
+
+
 
 
 
@@ -174,15 +237,18 @@ public class GunShoot : MonoBehaviour
 
     IEnumerator Reload()
     {
+
         isReloading = true;
 
 
+
         if (WeaponManager.Instance != null &&
-           WeaponManager.Instance.globalAmmoText != null)
+            WeaponManager.Instance.globalAmmoText != null)
         {
             WeaponManager.Instance.globalAmmoText.text =
                 "Reloading...";
         }
+
 
 
 
@@ -192,13 +258,37 @@ public class GunShoot : MonoBehaviour
 
 
 
-        currentAmmo = maxAmmo;
+
+
+        currentAmmo =
+            maxAmmo;
+
+
 
         isReloading = false;
 
 
+
         UpdateAmmoUI();
+
     }
+
+
+
+
+
+
+
+
+
+    void SaveAmmo()
+    {
+        // 현재 탄약 저장
+        // OnDisable 시 자동 호출
+        // 다음 OnEnable에서 유지됨
+    }
+
+
 
 
 
@@ -208,14 +298,37 @@ public class GunShoot : MonoBehaviour
 
     void UpdateAmmoUI()
     {
-        if (gameObject.activeInHierarchy &&
-           WeaponManager.Instance != null &&
-           WeaponManager.Instance.globalAmmoText != null)
+
+        if (WeaponManager.Instance == null)
+            return;
+
+
+
+        if (WeaponManager.Instance.currentWeaponIndex == -1)
+            return;
+
+
+
+
+        if (WeaponManager.Instance.weapons[
+            WeaponManager.Instance.currentWeaponIndex]
+            != gameObject)
+        {
+            return;
+        }
+
+
+
+
+
+        if (WeaponManager.Instance.globalAmmoText != null)
         {
             WeaponManager.Instance.globalAmmoText.text =
                 currentAmmo +
                 " / " +
                 maxAmmo;
         }
+
     }
+
 }
