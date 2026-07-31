@@ -49,21 +49,10 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        // 현재 위치 저장
-        Vector3 position = transform.position;
-        Quaternion rotation = transform.rotation;
-
-
-        // 재생성 요청
         if (spawner != null)
         {
-            spawner.SpawnEnemy(position, rotation);
+            spawner.RespawnEnemy();
         }
-        else
-        {
-            Debug.LogError("EnemySpawner를 찾을 수 없습니다.");
-        }
-
 
         Destroy(gameObject);
     }

@@ -6,6 +6,7 @@ public class OptionManager : MonoBehaviour
 {
     public GameObject optionPanel;
 
+
     [Header("Sensitivity")]
     public Slider sensitivitySlider;
     public TMP_InputField sensitivityInput;
@@ -17,6 +18,10 @@ public class OptionManager : MonoBehaviour
 
     void Start()
     {
+        // 게임 시작 시 무조건 정상 속도
+        Time.timeScale = 1f;
+
+
         // 저장된 감도 불러오기
         float sensitivity =
             PlayerPrefs.GetFloat(
@@ -47,24 +52,38 @@ public class OptionManager : MonoBehaviour
         );
 
 
+
+        // 시작할 때 옵션창 닫기
         optionPanel.SetActive(false);
 
 
 
-        // 시작 시 게임 정상 상태
-        Time.timeScale = 1f;
+        // 마우스 게임 상태
+        Cursor.visible = false;
+
+        Cursor.lockState =
+            CursorLockMode.Locked;
+
+
+        CameraLook.canLook = true;
+        GunShoot.canShoot = true;
     }
+
 
 
 
 
     void Update()
     {
+        Debug.Log("TimeScale : " + Time.timeScale);
+
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleOption();
         }
     }
+
 
 
 
@@ -76,13 +95,20 @@ public class OptionManager : MonoBehaviour
             !optionPanel.activeSelf;
 
 
+
         optionPanel.SetActive(open);
 
 
 
         if (open)
         {
-            // 옵션창
+            // -----------------
+            // 게임 정지
+            // -----------------
+
+            Time.timeScale = 0f;
+
+
             Cursor.visible = true;
 
             Cursor.lockState =
@@ -90,11 +116,18 @@ public class OptionManager : MonoBehaviour
 
 
             CameraLook.canLook = false;
+
             GunShoot.canShoot = false;
         }
         else
         {
-            // 게임 복귀
+            // -----------------
+            // 게임 재개
+            // -----------------
+
+            Time.timeScale = 1f;
+
+
             Cursor.visible = false;
 
             Cursor.lockState =
@@ -102,9 +135,11 @@ public class OptionManager : MonoBehaviour
 
 
             CameraLook.canLook = true;
-            GunShoot.canShoot= true;
+
+            GunShoot.canShoot = true;
         }
     }
+
 
 
 
@@ -132,6 +167,7 @@ public class OptionManager : MonoBehaviour
 
 
 
+
     void ChangeInput(string value)
     {
         float number;
@@ -149,6 +185,7 @@ public class OptionManager : MonoBehaviour
 
             sensitivitySlider.value =
                 number;
+
 
 
             PlayerPrefs.SetFloat(

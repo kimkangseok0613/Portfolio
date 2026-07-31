@@ -127,12 +127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ec0576da839a54e85a5193bee3501b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunShoot
-  bulletPrefab: {fileID: 4123542342146786202, guid: e7e1ee3225b200141867148951e3df37, type: 3}
+  bulletPrefab: {fileID: 6681766636307311056, guid: d86ac54c80bc64d4da120230a87a4110, type: 3}
   muzzle: {fileID: 1541520588910262749, guid: 18ad48cca7001ad4c89dbd69a3e05cef, type: 3}
   fireRate: 0.5
   reloadTime: 1.5
   maxAmmo: 15
-  ammoText: {fileID: 1763660181373787116, guid: 92247f18b7b5b7e458dd07d372ccb48b, type: 3}
 --- !u!1001 &4542165043932537523
 PrefabInstance:
   m_ObjectHideFlags: 0

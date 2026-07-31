@@ -189,13 +189,14 @@ public class GunShoot : MonoBehaviour
 
 
         GameObject bullet =
-            Instantiate(
+            Instantiate
+            (
                 bulletPrefab,
                 muzzle.position,
                 muzzle.rotation
             );
 
-
+        bullet.transform.Rotate(0, 0, 0);
 
 
 
