@@ -6,21 +6,16 @@ public class OptionManager : MonoBehaviour
 {
     public GameObject optionPanel;
 
-
     [Header("Sensitivity")]
     public Slider sensitivitySlider;
     public TMP_InputField sensitivityInput;
 
-
     public float defaultSensitivity = 200f;
-
-
 
     void Start()
     {
         // 게임 시작 시 무조건 정상 속도
         Time.timeScale = 1f;
-
 
         // 저장된 감도 불러오기
         float sensitivity =
@@ -29,41 +24,30 @@ public class OptionManager : MonoBehaviour
                 defaultSensitivity
             );
 
-
         sensitivitySlider.minValue = 50f;
         sensitivitySlider.maxValue = 500f;
 
-
         sensitivitySlider.value = sensitivity;
-
 
         sensitivityInput.text =
             sensitivity.ToString("0");
 
-
-
         sensitivitySlider.onValueChanged.AddListener(
-            ChangeSlider
+            ChangeSlider        
         );
-
 
         sensitivityInput.onEndEdit.AddListener(
             ChangeInput
         );
 
-
-
         // 시작할 때 옵션창 닫기
         optionPanel.SetActive(false);
-
-
 
         // 마우스 게임 상태
         Cursor.visible = false;
 
         Cursor.lockState =
             CursorLockMode.Locked;
-
 
         CameraLook.canLook = true;
         GunShoot.canShoot = true;
