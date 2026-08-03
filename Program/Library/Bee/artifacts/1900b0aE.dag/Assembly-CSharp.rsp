@@ -484,6 +484,7 @@
 "Assets/Scrips/MiniMapEnemy.cs"
 "Assets/Scrips/MiniMapFollow.cs"
 "Assets/Scrips/Options/OptionManager.cs"
+"Assets/Scrips/PlayerHealth.cs"
 "Assets/Scrips/PlayerMovement.cs"
 "Assets/Scrips/SceneLoader.cs"
 "Assets/Scrips/SkillCooldown.cs"

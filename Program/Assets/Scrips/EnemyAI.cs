@@ -5,11 +5,20 @@ public class EnemyAI : MonoBehaviour
     public enum State
     {
         Wander,
-        Chase
+        Chase,
+        Attack,
+        Dead
     }
+    [Header("공격")]
+    public float attackDistance = 2f;
+    public float attackDamage = 10f;
+    public float attackDelay = 1.5f;
+
+    private float attackTimer;
 
     [Header("현재 상태")]
     public State currentState = State.Wander;
+
 
 
     [Header("이동 속도")]
@@ -17,8 +26,10 @@ public class EnemyAI : MonoBehaviour
     public float chaseSpeed = 4f;
 
 
+
     [Header("플레이어 감지")]
     public float detectDistance = 10f;
+
 
 
     [Header("랜덤 이동")]
@@ -26,8 +37,10 @@ public class EnemyAI : MonoBehaviour
     public float wanderWaitTime = 3f;
 
 
+
     private Transform player;
     private Animator animator;
+
 
 
     private Vector3 targetPosition;
@@ -50,7 +63,6 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
 
 
-        // 처음 랜덤 목적지 설정
         SetRandomDestination();
     }
 
@@ -58,10 +70,15 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Enemy AI 실행");
+        // 죽은 상태면 아무것도 안함
+        if (currentState == State.Dead)
+            return;
+
+
 
         if (player == null)
             return;
+
 
 
         float distance =
@@ -71,12 +88,20 @@ public class EnemyAI : MonoBehaviour
             );
 
 
-        // 아직 추적 전일 때만 감지
-        if (currentState == State.Wander)
+
+        if (currentState != State.Dead)
         {
-            if (distance <= detectDistance)
+            if (distance <= attackDistance)
+            {
+                currentState = State.Attack;
+            }
+            else if (distance <= detectDistance)
             {
                 currentState = State.Chase;
+            }
+            else
+            {
+                currentState = State.Wander;
             }
         }
 
@@ -92,15 +117,61 @@ public class EnemyAI : MonoBehaviour
             case State.Chase:
                 Chase();
                 break;
+
+
+            case State.Attack:
+                Attack();
+                break;
+        }
+    }
+
+    void Attack()
+    {
+        animator.SetBool("isRun", false);
+
+
+        Vector3 direction =
+            (player.position - transform.position)
+            .normalized;
+
+
+        direction.y = 0;
+
+
+        LookDirection(direction);
+
+
+
+        attackTimer += Time.deltaTime;
+
+
+        if (attackTimer >= attackDelay)
+        {
+            attackTimer = 0;
+
+
+            PlayerHealth hp =
+                player.GetComponent<PlayerHealth>();
+
+
+            if (hp != null)
+            {
+                hp.TakeDamage(attackDamage);
+            }
+
+
+            Debug.Log("적 공격!");
         }
     }
 
     // -------------------------
     // 랜덤 이동
     // -------------------------
+
     void Wander()
     {
         animator.SetBool("isRun", false);
+
 
 
         Vector3 direction =
@@ -108,10 +179,12 @@ public class EnemyAI : MonoBehaviour
             .normalized;
 
 
+
         transform.position +=
             direction *
             wanderSpeed *
             Time.deltaTime;
+
 
 
         LookDirection(direction);
@@ -123,6 +196,7 @@ public class EnemyAI : MonoBehaviour
                 transform.position,
                 targetPosition
             );
+
 
 
         if (distance < 0.5f)
@@ -159,12 +233,15 @@ public class EnemyAI : MonoBehaviour
 
 
 
+
     // -------------------------
-    // 플레이어 추적
+    // 추적
     // -------------------------
+
     void Chase()
     {
         animator.SetBool("isRun", true);
+
 
 
         Vector3 direction =
@@ -173,13 +250,16 @@ public class EnemyAI : MonoBehaviour
              .normalized;
 
 
+
         direction.y = 0;
+
 
 
         transform.position +=
             direction *
             chaseSpeed *
             Time.deltaTime;
+
 
 
         LookDirection(direction);
@@ -189,15 +269,47 @@ public class EnemyAI : MonoBehaviour
 
 
 
+    // -------------------------
+    // 사망 처리
+    // -------------------------
+
+    public void Die()
+    {
+        currentState = State.Dead;
+
+
+        animator.SetBool("isRun", false);
+
+
+        // Death Trigger 실행
+        animator.SetTrigger("Die");
+
+
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+        }
+    }
+
+
+
+
+
     // 방향 바라보기
+
     void LookDirection(Vector3 direction)
     {
         if (direction == Vector3.zero)
             return;
 
 
+
         Quaternion rotation =
             Quaternion.LookRotation(direction);
+
 
 
         transform.rotation =
@@ -211,7 +323,7 @@ public class EnemyAI : MonoBehaviour
 
 
 
-    // Scene에서 감지거리 표시
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

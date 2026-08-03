@@ -98,6 +98,7 @@ MonoBehaviour:
   speed: 50
   damage: 70
   lifeTime: 5
+  visualRotationOffset: {x: 90, y: 0, z: 0}
 --- !u!1 &8089881680302868167
 GameObject:
   m_ObjectHideFlags: 0

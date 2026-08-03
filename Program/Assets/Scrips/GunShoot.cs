@@ -6,9 +6,13 @@ using System.Collections;
 public class GunShoot : MonoBehaviour
 {
     [SerializeField] public static int zoomWeaponIndex;
+
     [Header("총 설정")]
     public GameObject bulletPrefab;
     public Transform muzzle;
+
+    [Tooltip("총알이 세워져서 나갈 때 회전 보정값 (예: X=90, Y=0, Z=0)")]
+    public Vector3 bulletRotationOffset = new Vector3(90f, 0f, 0f); // 기본값 X축 90도 회전
 
     public float fireRate = 0.2f;
     public float reloadTime = 1.5f;
@@ -163,71 +167,23 @@ public class GunShoot : MonoBehaviour
 
     void Shoot()
     {
+        if (bulletPrefab == null) return;
+        if (muzzle == null) return;
 
-        if (bulletPrefab == null)
+        // 1. Muzzle의 원래 방향 그대로 총알 생성 (이동 방향 보장)
+        GameObject bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+
+        // 2. 총알 충돌 무시 로직
+        Collider bulletCol = bullet.GetComponent<Collider>();
+        Collider gunCol = GetComponent<Collider>();
+
+        if (bulletCol != null && gunCol != null)
         {
-            Debug.LogWarning(
-                "Bullet Prefab이 없습니다."
-            );
-
-            return;
+            Physics.IgnoreCollision(bulletCol, gunCol);
         }
-
-
-
-
-        if (muzzle == null)
-        {
-            Debug.LogWarning(
-                "Muzzle이 없습니다."
-            );
-
-            return;
-        }
-
-
-
-
-        GameObject bullet =
-            Instantiate
-            (
-                bulletPrefab,
-                muzzle.position,
-                muzzle.rotation
-            );
-
-        bullet.transform.Rotate(0, 0, 0);
-
-
-
-        Collider bulletCol =
-            bullet.GetComponent<Collider>();
-
-
-        Collider gunCol =
-            GetComponent<Collider>();
-
-
-
-
-        if (bulletCol != null &&
-            gunCol != null)
-        {
-            Physics.IgnoreCollision(
-                bulletCol,
-                gunCol
-            );
-        }
-
-
-
-
 
         currentAmmo--;
-
-
         UpdateAmmoUI();
-
     }
 
 
