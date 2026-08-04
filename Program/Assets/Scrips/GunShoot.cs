@@ -11,11 +11,29 @@ public class GunShoot : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform muzzle;
 
+    [Header("Sound")]
+    public AudioClip shootSound;
+    private AudioSource audioSource;
+
     [Tooltip("총알이 세워져서 나갈 때 회전 보정값 (예: X=90, Y=0, Z=0)")]
     public Vector3 bulletRotationOffset = new Vector3(90f, 0f, 0f); // 기본값 X축 90도 회전
 
     public float fireRate = 0.2f;
     public float reloadTime = 1.5f;
+
+    [Header("Recoil")]
+    public float verticalRecoil = 1f;
+    public float horizontalRecoil = 0.15f;
+
+    public float recoilRecovery = 10f;
+
+    [Header("Gun Kick")]
+    public Transform gunModel;
+    public float kickBackDistance = 0.05f;
+    public float kickBackReturnSpeed = 15f;
+
+    private Vector3 gunOriginPosition;
+    private Vector3 gunKickPosition;
 
 
     [Header("탄약")]
@@ -37,10 +55,15 @@ public class GunShoot : MonoBehaviour
     void Awake()
     {
         currentAmmo = maxAmmo;
+
+        audioSource = GetComponent<AudioSource>();
+
+        if (gunModel != null)
+        {
+            gunOriginPosition =
+                gunModel.localPosition;
+        }
     }
-
-
-
 
     void OnEnable()
     {
@@ -156,7 +179,18 @@ public class GunShoot : MonoBehaviour
 
             Shoot();
         }
+        if (gunModel != null)
+        {
+            gunKickPosition =
+                Vector3.Lerp(
+                    gunKickPosition,
+                    Vector3.zero,
+                    kickBackReturnSpeed * Time.deltaTime
+                );
 
+            gunModel.localPosition =
+                gunOriginPosition + gunKickPosition;
+        }
     }
 
 
@@ -171,8 +205,17 @@ public class GunShoot : MonoBehaviour
         if (muzzle == null) return;
 
         // 1. Muzzle의 원래 방향 그대로 총알 생성 (이동 방향 보장)
-        GameObject bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+        GameObject bullet = Instantiate(
+    bulletPrefab,
+    muzzle.position,
+    muzzle.rotation
+);
 
+
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
         // 2. 총알 충돌 무시 로직
         Collider bulletCol = bullet.GetComponent<Collider>();
         Collider gunCol = GetComponent<Collider>();
@@ -184,6 +227,25 @@ public class GunShoot : MonoBehaviour
 
         currentAmmo--;
         UpdateAmmoUI();
+
+        CameraLook cameraLook =
+    Camera.main.GetComponent<CameraLook>();
+
+        if (cameraLook != null)
+        {
+            cameraLook.AddRecoil(
+                verticalRecoil,
+                horizontalRecoil,
+                recoilRecovery
+            );
+        }
+
+
+        if (gunModel != null)
+        {
+            gunKickPosition =
+                Vector3.back * kickBackDistance;
+        }
     }
 
 

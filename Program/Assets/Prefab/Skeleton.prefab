@@ -590,6 +590,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 2552327617057372446, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_Controller
       value: 
@@ -698,10 +706,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 2.2
+  m_Radius: 0.8
+  m_Height: 2.24
   m_Direction: 1
-  m_Center: {x: 0, y: 0.78, z: 0}
+  m_Center: {x: 0, y: 0.84, z: 0}
 --- !u!54 &6441759367868052469
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -743,6 +751,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHp: 200
   hpBar: {fileID: 1957835019399327417}
+  blinkTime: 1.5
+  blinkSpeed: 0.1
 --- !u!114 &3385056397561123362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,6 +765,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001c975026c97454d9d33f223e527f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  attackDistance: 2
+  attackDamage: 10
+  attackDelay: 1.5
   currentState: 0
   wanderSpeed: 1
   chaseSpeed: 2.5

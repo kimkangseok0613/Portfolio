@@ -6,6 +6,15 @@ using TMPro;
 
 public class CameraLook : MonoBehaviour
 {
+    [Header("Recoil")]
+
+    private float currentVerticalRecoil;
+    private float currentHorizontalRecoil;
+
+    private float recoilReturnSpeed = 10f;
+
+    private float recoilReset;
+
     public float mouseSensitivity = 200f;
 
     public Transform playerBody;
@@ -117,7 +126,13 @@ public class CameraLook : MonoBehaviour
 
 
 
+    public void AddRecoil(float vertical, float horizontal)
+    {
+        currentVerticalRecoil += vertical;
 
+        currentHorizontalRecoil +=
+            Random.Range(-horizontal, horizontal);
+    }
 
 
 
@@ -241,12 +256,28 @@ public class CameraLook : MonoBehaviour
 
 
 
+        currentVerticalRecoil =
+Mathf.Lerp(
+    currentVerticalRecoil,
+    0,
+    recoilReturnSpeed * Time.deltaTime
+);
+
+
+        currentHorizontalRecoil =
+        Mathf.Lerp(
+            currentHorizontalRecoil,
+            0,
+            recoilReturnSpeed * Time.deltaTime
+        );
+
+
         transform.localRotation =
-            Quaternion.Euler(
-                xRotation,
-                0f,
-                0f
-            );
+        Quaternion.Euler(
+            xRotation - currentVerticalRecoil,
+            currentHorizontalRecoil,
+            0
+        );
 
 
 
@@ -262,7 +293,7 @@ public class CameraLook : MonoBehaviour
         // ¡‹ √≥∏Æ
 
         Zoom();
-
+        
     }
 
 
@@ -299,6 +330,32 @@ public class CameraLook : MonoBehaviour
                 ref currentVelocity,
                 1f / zoomSpeed
             );
+    }
+
+    public void AddRecoil(
+    float vertical,
+    float horizontal,
+    float recovery)
+    {
+        currentVerticalRecoil += vertical;
+
+        currentVerticalRecoil =
+            Mathf.Clamp(
+                currentVerticalRecoil,
+                0,
+                15f
+            );
+
+
+        currentHorizontalRecoil +=
+            Random.Range(
+                -horizontal,
+                horizontal
+            );
+
+
+        recoilReturnSpeed =
+            recovery;
     }
 
 }

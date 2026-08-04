@@ -36,7 +36,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (hpText != null)
         {
-            hpText.text = $"{Mathf.CeilToInt(hp)} / {Mathf.CeilToInt(maxHp)}";
+            hpText.text = $"HP {Mathf.CeilToInt(hp)} / {Mathf.CeilToInt(maxHp)}";
         }
     }
 
@@ -45,7 +45,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("플레이어 사망");
         if (hpText != null)
         {
-            hpText.text = "0 / " + Mathf.CeilToInt(maxHp);
+            hpText.text = $"HP 0 / " + Mathf.CeilToInt(maxHp);
         }
     }
 }
