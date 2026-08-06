@@ -718,7 +718,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8858051749441068820}
   serializedVersion: 5
-  m_Mass: 10
+  m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -766,11 +766,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   attackDistance: 2
-  attackDamage: 10
+  attackDamage: 20
   attackDelay: 1.5
   currentState: 0
   wanderSpeed: 1
-  chaseSpeed: 2.5
-  detectDistance: 10
+  chaseSpeed: 6
+  detectDistance: 100
   wanderRadius: 10
   wanderWaitTime: 2

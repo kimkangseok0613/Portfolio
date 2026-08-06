@@ -478,6 +478,7 @@
 "Assets/Scrips/EnemyHealth.cs"
 "Assets/Scrips/EnemySpawner.cs"
 "Assets/Scrips/Exit.cs"
+"Assets/Scrips/GameManager.cs"
 "Assets/Scrips/GunPickup.cs"
 "Assets/Scrips/GunShoot.cs"
 "Assets/Scrips/JumpPad.cs"

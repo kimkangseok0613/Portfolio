@@ -47,5 +47,6 @@ public class PlayerHealth : MonoBehaviour
         {
             hpText.text = $"HP 0 / " + Mathf.CeilToInt(maxHp);
         }
+        GameManager.Instance.EndGame();
     }
 }

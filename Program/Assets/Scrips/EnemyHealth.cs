@@ -87,24 +87,14 @@ public class EnemyHealth : MonoBehaviour
     {
         dead = true;
 
+        GameManager.Instance.AddKill();
 
-        // AI 정지
         EnemyAI ai = GetComponent<EnemyAI>();
 
         if (ai != null)
         {
             ai.enabled = false;
         }
-
-
-
-        // 스폰 예약
-        if (spawner != null)
-        {
-            spawner.RespawnEnemy();
-        }
-
-
 
         StartCoroutine(BlinkAndDestroy());
     }

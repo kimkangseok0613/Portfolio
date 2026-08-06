@@ -1,119 +1,75 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
 
 public class EnemySpawner : MonoBehaviour
 {
-
     public GameObject enemyPrefab;
-
-
-
     public Transform player;
 
-
-
     [Header("생성 거리")]
-    public float spawnRadius = 10f;
-
-
+    public float minSpawnDistance = 12f;
+    public float maxSpawnDistance = 18f;
 
     [Header("생성 높이")]
     public float spawnHeight = 1f;
 
+    [Header("생성 간격")]
+    public float spawnDelay = 2f;
 
+    [Header("최대 적 수")]
+    public int maxEnemyCount = 7;
 
-    [Header("재생성 시간")]
-    public float respawnDelay = 2f;
-
-
-
-
+    private List<GameObject> enemies = new List<GameObject>();
 
     void Start()
     {
-
         if (player == null)
         {
-            GameObject p =
-                GameObject.FindGameObjectWithTag("Player");
-
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
 
             if (p != null)
                 player = p.transform;
         }
 
-
-
-        SpawnEnemy();
+        StartCoroutine(SpawnLoop());
     }
 
-
-
-
-
-
-
-    public void SpawnEnemy()
+    IEnumerator SpawnLoop()
     {
-
-        if (player == null)
+        while (true)
         {
-            Debug.LogError("Player 없음");
-            return;
+            yield return new WaitForSeconds(spawnDelay);
+
+            if (GameManager.Instance != null &&
+                GameManager.Instance.IsGameEnded)
+                yield break;
+
+            // 죽은 적 리스트에서 제거
+            enemies.RemoveAll(enemy => enemy == null);
+
+            if (enemies.Count < maxEnemyCount)
+            {
+                SpawnEnemy();
+            }
         }
+    }
 
+    void SpawnEnemy()
+    {
+        Vector2 randomDir = Random.insideUnitCircle.normalized;
 
+        float distance = Random.Range(minSpawnDistance, maxSpawnDistance);
 
-
-        Vector3 randomPosition =
+        Vector3 spawnPosition =
             player.position +
-            new Vector3(
-                Random.Range(-spawnRadius, spawnRadius),
-                0,
-                Random.Range(-spawnRadius, spawnRadius)
-            );
+            new Vector3(randomDir.x, 0, randomDir.y) * distance;
 
+        spawnPosition.y = spawnHeight;
 
+        GameObject enemy =
+            Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
-        randomPosition.y =
-            spawnHeight;
-
-
-
-
-
-        Instantiate(
-            enemyPrefab,
-            randomPosition,
-            Quaternion.identity
-        );
-    }
-
-
-
-
-
-
-    public void RespawnEnemy()
-    {
-        StartCoroutine(RespawnCoroutine());
-    }
-
-
-
-
-
-
-
-    IEnumerator RespawnCoroutine()
-    {
-
-        yield return
-            new WaitForSeconds(respawnDelay);
-
-
-
-        SpawnEnemy();
+        enemies.Add(enemy);
     }
 }

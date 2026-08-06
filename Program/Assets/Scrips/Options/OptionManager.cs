@@ -100,17 +100,15 @@ public class OptionManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("TimeScale : " + Time.timeScale);
-
+        if (GameManager.Instance != null &&
+            GameManager.Instance.IsGameEnded)
+            return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleOption();
         }
     }
-
-
-
 
 
 
