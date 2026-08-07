@@ -40625,7 +40625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8260bdd560cf2149951feaf17c6ebc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  gameTime: 50
+  gameTime: 60
   timerText: {fileID: 1720194896}
   killText: {fileID: 1524929697}
   gameOverPanel: {fileID: 90456125}
@@ -57685,12 +57685,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b72beead22a0ec24995df5baac9f8974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 8858051749441068820, guid: 4c67ed6c086451b4db54ac4d24b626bb, type: 3}
+  enemyPrefab: {fileID: 4493914613880827488, guid: 6dc4cf4496348884d8ee27743ae38562, type: 3}
   player: {fileID: 424638584}
-  minSpawnDistance: 12
+  minSpawnDistance: 15
   maxSpawnDistance: 18
   spawnHeight: 0.1
-  spawnDelay: 2
+  spawnDelay: 3
   maxEnemyCount: 4
 --- !u!1001 &1624524857
 PrefabInstance:
@@ -62045,57 +62045,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2256879296330761541, guid: ddaaaa66e4cb4a44e99b6c554dbf3605, type: 3}
   m_PrefabInstance: {fileID: 1739423325}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1741189240
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1741189242}
-  - component: {fileID: 1741189241}
-  m_Layer: 0
-  m_Name: EnemySpawner (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1741189241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741189240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72beead22a0ec24995df5baac9f8974, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 8858051749441068820, guid: 4c67ed6c086451b4db54ac4d24b626bb, type: 3}
-  player: {fileID: 424638584}
-  minSpawnDistance: 12
-  maxSpawnDistance: 18
-  spawnHeight: 0.1
-  spawnDelay: 2
-  maxEnemyCount: 4
---- !u!4 &1741189242
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741189240}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.10963, y: -1.8862, z: -8.90597}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1741266657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75813,6 +75762,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: f9ab20b4342184a46921955b3300481d, type: 3}
     - target: {fileID: 598046947270324586, guid: d331c5d3f118020438758de5ec0d2c97, type: 3}
+      propertyPath: recoilRecovery
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 598046947270324586, guid: d331c5d3f118020438758de5ec0d2c97, type: 3}
       propertyPath: verticalRecoil
       value: 2
       objectReference: {fileID: 0}
@@ -75974,6 +75927,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1767728617}
     - target: {fileID: 2066236398537815403, guid: b3f2e4dd247ee04469f92eef42d23652, type: 3}
+      propertyPath: maxAmmo
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2066236398537815403, guid: b3f2e4dd247ee04469f92eef42d23652, type: 3}
       propertyPath: ammoText
       value: 
       objectReference: {fileID: 1191988864320871405}
@@ -76123,7 +76080,7 @@ PrefabInstance:
       objectReference: {fileID: 1781339479}
     - target: {fileID: 6292249388669802973, guid: f62b5068047cd4a4ba988852d05acfe5, type: 3}
       propertyPath: maxAmmo
-      value: 25
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 6292249388669802973, guid: f62b5068047cd4a4ba988852d05acfe5, type: 3}
       propertyPath: ammoText
@@ -76593,7 +76550,6 @@ SceneRoots:
   - {fileID: 424638584}
   - {fileID: 1050846714}
   - {fileID: 1624416242}
-  - {fileID: 1741189242}
   - {fileID: 663274794}
   - {fileID: 1623752829}
   - {fileID: 1397833063}

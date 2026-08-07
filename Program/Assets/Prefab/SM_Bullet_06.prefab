@@ -188,4 +188,5 @@ MonoBehaviour:
   speed: 50
   damage: 40
   lifeTime: 5
+  knockbackPower: 5
   visualRotationOffset: {x: 90, y: 0, z: 0}

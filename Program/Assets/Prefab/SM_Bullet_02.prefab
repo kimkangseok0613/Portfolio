@@ -95,9 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73e9e12f266acf348aae46d0b36224d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  speed: 90
+  speed: 50
   damage: 70
   lifeTime: 5
+  knockbackPower: 10
   visualRotationOffset: {x: 90, y: 0, z: 0}
 --- !u!1 &8089881680302868167
 GameObject:

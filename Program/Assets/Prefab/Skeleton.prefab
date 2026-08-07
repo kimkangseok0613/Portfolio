@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 001c975026c97454d9d33f223e527f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  attackDistance: 2
+  attackDistance: 3
   attackDamage: 20
   attackDelay: 1.5
   currentState: 0
